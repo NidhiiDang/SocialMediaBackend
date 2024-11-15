@@ -33,4 +33,9 @@ public class Post {
 
     private LocalDateTime createdAt;
 
+    public Post(String caption, String image, String video) {
+        this.caption = caption;
+        this.image = image;
+        this.video = video;
+    }
 }

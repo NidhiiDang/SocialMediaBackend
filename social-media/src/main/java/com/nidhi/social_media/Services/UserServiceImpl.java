@@ -1,5 +1,6 @@
 package com.nidhi.social_media.Services;
 
+import com.nidhi.social_media.Dto.UserDto;
 import com.nidhi.social_media.Jwt.JwtService;
 import com.nidhi.social_media.Model.Users;
 import com.nidhi.social_media.Repository.UserRepo;
@@ -19,6 +20,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepo userRepo;
 
+//    @Autowired
+//    private UserService userService;
+
     @Autowired
     private JwtService jwtService;
 
@@ -28,9 +32,10 @@ public class UserServiceImpl implements UserService{
     private AuthenticationManager authManager;
 
     @Override
-    public Users registerUser(Users user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        return userRepo.save(user);
+    public Users registerUser(UserDto user) {
+        Users u = new Users(user.getFirstName(), user.getLastName(), user.getUsername(), encoder.encode(user.getPassword()));
+//        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepo.save(u);
     }
 
     @Override
@@ -45,8 +50,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Users findUserByEmail(String email) {
-        return userRepo.findByUsername(email);
+    public Users findUserByUsername(String username) {
+        return userRepo.findByUsername(username);
     }
 
     @Override
@@ -93,6 +98,16 @@ public class UserServiceImpl implements UserService{
         return user;
 
     }
+
+//    @Override
+//    public Users findUserByJwt(String jwt) {
+//        String username = jwtService.extractUserName(jwt);
+//        if (username == null) {
+//            return null;
+//        }
+//        return userService.findUserByEmail(username);
+//
+//    }
 
     @Override
     public List<Users> searchUser(String query) {

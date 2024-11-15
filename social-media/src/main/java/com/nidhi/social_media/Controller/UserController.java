@@ -1,14 +1,19 @@
 package com.nidhi.social_media.Controller;
 
 import com.nidhi.social_media.CustomResponses.ApiResponse;
+import com.nidhi.social_media.Dto.UserDto;
 import com.nidhi.social_media.Model.Users;
 import com.nidhi.social_media.Services.UserService;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -18,7 +23,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<Users>> addUser(@RequestBody Users user) {
+    public ResponseEntity<ApiResponse<Users>> addUser(@Valid @RequestBody UserDto user) {
         try {
             Users result = userService.registerUser(user);
             ApiResponse<Users> response = new ApiResponse<>("Success", result);
@@ -54,10 +59,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/secure/find/{email}")
-    public ResponseEntity<ApiResponse<Users>> getUserByEmail(@PathVariable String email) {
+    @GetMapping("/secure/find/{username}")
+    public ResponseEntity<ApiResponse<Users>> getUserByEmail(@PathVariable String username) {
         try {
-            Users result = userService.findUserByEmail(email);
+            Users result = userService.findUserByUsername(username);
             ApiResponse<Users> response = new ApiResponse<>("Success", result);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
@@ -114,7 +119,4 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
-

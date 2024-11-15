@@ -3,6 +3,7 @@ package com.nidhi.social_media.Controller;
 import com.nidhi.social_media.CustomResponses.ApiResponse;
 import com.nidhi.social_media.Model.Post;
 import com.nidhi.social_media.Services.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class PostController {
     private PostService postService;
 
     @PostMapping("/posts/user/{userId}")
-    public ResponseEntity<ApiResponse<Post>> createPost(@RequestBody Post post, @PathVariable Long userId){
+    public ResponseEntity<ApiResponse<Post>> createPost(@Valid @RequestBody Post post, @PathVariable Long userId){
        try {
            Post createdPost = postService.createPost(post, userId);
            ApiResponse<Post> response = new ApiResponse<>("success",createdPost);
